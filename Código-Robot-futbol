@@ -1,0 +1,123 @@
+const int pinPWMA = 5;
+const int pinAIN2 = 10;
+const int pinAIN1 = 9;
+const int pinBIN1 = 11;
+const int pinBIN2 = 7;
+const int pinPWMB = 6;
+int blue = "";
+
+int speed = 255; //velocidad de giro
+
+const int pinMotorB[3] = { pinPWMA, pinAIN2, pinAIN1 };
+const int pinMotorA[3] = { pinPWMB, pinBIN1, pinBIN2 };
+
+enum moveDirection {
+  forward,
+  backward
+};
+
+enum turnDirection {
+  Right,
+  Left
+};
+
+void setup() {
+  Serial.begin(9600);
+
+
+  pinMode(pinAIN2, OUTPUT);
+  pinMode(pinAIN1, OUTPUT);
+  pinMode(pinPWMA, OUTPUT);
+  pinMode(pinBIN1, OUTPUT);
+  pinMode(pinBIN2, OUTPUT);
+  pinMode(pinPWMB, OUTPUT);
+
+}
+
+void loop() { //1 no detecta
+  if (Serial.available()> 0 ) {
+    blue = Serial.read();
+    Serial.println(blue);
+    if (blue == 'F') {
+      move(forward, speed);
+    } else if (blue == 'B') {
+      move(backward, speed);
+    } else if (blue == 'R') {
+      turn(Left, speed);
+    } else if (blue == 'L') {
+      turn(Right, speed);
+    } else if (blue == 'S') {
+      fullStop();
+    }
+  }
+}
+
+//Funciones que controlan el vehiculo
+
+
+void move(int direction, int speed)
+{
+  if (direction == forward)
+  { moveMotorForward(pinMotorB, speed);
+    moveMotorForward(pinMotorA, speed);
+
+  }
+  if (direction == backward)
+  {
+    moveMotorBackward(pinMotorB, speed);
+    moveMotorBackward(pinMotorA, speed);
+
+  }
+}
+
+void turn(int direction, int speed)
+{
+  if (direction == Left)
+  {
+    moveMotorBackward(pinMotorB, speed);
+    moveMotorForward(pinMotorA, speed);
+    ;
+  }
+  if (direction == Right)
+  {
+    moveMotorForward(pinMotorB, speed);
+    moveMotorBackward(pinMotorA, speed);
+
+  }
+}
+
+void fullStop()
+{
+
+  stopMotor(pinMotorA);
+  stopMotor(pinMotorB);
+}
+
+//Funciones que controlan los motores
+void moveMotorForward(const int pinMotor[3], int speed)
+{
+  digitalWrite(pinMotor[1], HIGH);
+  digitalWrite(pinMotor[2], LOW);
+
+  analogWrite(pinMotor[0], speed);
+
+}
+
+void moveMotorBackward(const int pinMotor[3], int speed)
+{
+  digitalWrite(pinMotor[1], LOW);
+  digitalWrite(pinMotor[2], HIGH);
+
+  analogWrite(pinMotor[0], speed);
+
+}
+
+void stopMotor(const int pinMotor[3])
+{
+
+  digitalWrite(pinMotor[1], LOW);
+  digitalWrite(pinMotor[2], LOW);
+
+  analogWrite(pinMotor[0], 0);
+
+}
