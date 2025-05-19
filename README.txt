@@ -2,7 +2,7 @@
 
 # Robot Futbolista Controlado por Bluetooth ⚽🤖🔵
 
-![Image](https://github.com/user-attachments/assets/0c17e71f-68bc-4989-b155-f6596f56de59)
+https://github.com/WorldDevelopersMaker/Robot_Futbol/issues/2#issue-3075217829
 
 Este repositorio contiene el código para controlar un robot futbolista mediante Bluetooth. El sistema incluye:
 
